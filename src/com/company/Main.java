@@ -4,9 +4,11 @@ import com.company.manager.ManagerCorredors;
 import com.company.manager.ManagerEquips;
 import com.company.view.PantallaMenuPrincipal;
 
+import java.io.IOException;
+
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         ManagerEquips.inscriureEquip("LLiure");
         ManagerEquips.inscriureEquip("Equip A");
         ManagerEquips.inscriureEquip("Equip B");

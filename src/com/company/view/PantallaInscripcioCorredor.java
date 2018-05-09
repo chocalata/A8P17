@@ -9,8 +9,10 @@ import com.company.view.widget.Missatge;
 import com.company.view.widget.WidgetCorredors;
 import com.company.view.widget.WidgetEquips;
 
+import java.io.IOException;
+
 public class PantallaInscripcioCorredor {
-    public static void mostrar(){
+    public static void mostrar() throws IOException {
 
         Missatge.mostrarTitol("MARATHON :: Corredors :: Inscripció");
 

@@ -3,10 +3,11 @@ package com.company.view;
 import com.company.view.widget.LectorTeclat;
 import com.company.view.widget.Missatge;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class PantallaMenuPrincipal {
-    public static void mostrar(){
+    public static void mostrar() throws IOException {
         while(true) {
             Missatge.mostrarTitol("MARATHON");
             System.out.println("a) Corredors");
