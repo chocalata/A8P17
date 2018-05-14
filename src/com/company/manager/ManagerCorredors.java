@@ -12,25 +12,35 @@ public class ManagerCorredors {
         if(equip == null){
             return null;
         }
-        DataOutputStream out = new DataOutputStream(new BufferedOutputStream(
-                new FileOutputStream("corredores.txt", true)));
-
-        out.writeUTF(nom);
-        out.writeUTF(String.valueOf(55+1));
-        out.writeUTF(String.valueOf(1));
-
-        out.close();
-
+        try {
+            FileWriter fileWriter = new FileWriter("corredores.txt", true);
+            fileWriter.write(nom + ":");
+            fileWriter.write(String.valueOf(equip.id) + ":");
+            fileWriter.write(String.valueOf(obtenirNumeroCorredors()+1) + "\n");
+            fileWriter.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
         return null;
     }
 
     public static Corredor obtenirCorredor(int id){
-        for (int i = 0; i < corredors.length; i++) {
-            if(corredors[i] != null && corredors[i].id == id){
-                return corredors[i];
-            }
-        }
+        try {
+            BufferedReader fileReader = new BufferedReader(new FileReader("corredores.txt"));
+            String lineaCorredor;
+            while ((lineaCorredor = fileReader.readLine()) != null) {
+                String[] partes = lineaCorredor.split(":");
 
+                if(id == Integer.parseInt(partes[2])){
+                    Corredor corredor = new Corredor(partes[0], Integer.parseInt(partes[1]));
+                    corredor.id = id;
+
+                    return corredor;
+                }
+            }
+        } catch (IOException e){
+            e.printStackTrace();
+        }
         return null;
     }
 
@@ -63,12 +73,19 @@ public class ManagerCorredors {
     }
 
     public static boolean existeixCorredor(String nom){
-        for (int i = 0; i < corredors.length; i++) {
-            if(corredors[i] != null && corredors[i].nom.toLowerCase().equals(nom.toLowerCase())){
-                return true;
-            }
-        }
+        try {
+            BufferedReader fileReader = new BufferedReader(new FileReader("corredores.txt"));
+            String lineaCorredor;
+            while ((lineaCorredor = fileReader.readLine()) != null) {
+                String[] partes = lineaCorredor.split(":");
 
+                if(nom.toLowerCase().equals(partes[0].toLowerCase())){
+                    return true;
+                }
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
         return false;
     }
 
@@ -112,14 +129,18 @@ public class ManagerCorredors {
     }
 
     private static int obtenirNumeroCorredors(){
-        int count = 0;
-        for (int i = 0; i < corredors.length; i++) {
-            if(corredors[i] != null){
-                count++;
+        try {
+            BufferedReader fileReader = new BufferedReader(new FileReader("corredores.txt"));
+            String lineaCorredor;
+            int corredores = 0;
+            while ((lineaCorredor = fileReader.readLine()) != null) {
+                corredores += 1;
             }
+            return corredores;
+        }catch (IOException e){
+            e.printStackTrace();
         }
-
-        return count;
+        return 0;
     }
 
     private static int obtenirNumeroCorredorsPerNom(String nom){
