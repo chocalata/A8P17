@@ -10,10 +10,6 @@ import java.io.IOException;
 
 public class MainTest {
     public static void main(String[] args) throws IOException {
-        ManagerCorredors.inscriureCorredor("pepe", new Equip("CorredoresX"));
-        ManagerCorredors.inscriureCorredor("juan", new Equip("CorredoresX"));
-        Corredor corredor = ManagerCorredors.obtenirCorredor(1004);
-        System.out.println(corredor.nom + " " + corredor.idEquip + " " + corredor.id);
-
+        ManagerCorredors.modificarNomCorredor(5, "Ismanuel asd");
     }
 }

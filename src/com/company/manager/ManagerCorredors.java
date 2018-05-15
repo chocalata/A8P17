@@ -4,6 +4,11 @@ import com.company.model.Corredor;
 import com.company.model.Equip;
 
 import java.io.*;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 public class ManagerCorredors {
     static Corredor[] corredors = new Corredor[100];
@@ -13,7 +18,7 @@ public class ManagerCorredors {
             return null;
         }
         try {
-            FileWriter fileWriter = new FileWriter("corredores.txt", true);
+            FileWriter fileWriter = new FileWriter("corredores.txt", true); //
             fileWriter.write(nom + ":");
             fileWriter.write(String.valueOf(equip.id) + ":");
             fileWriter.write(String.valueOf(obtenirNumeroCorredors()+1) + "\n");
@@ -90,11 +95,36 @@ public class ManagerCorredors {
     }
 
     public static void modificarNomCorredor(int id, String nouNom){
-        for (int i = 0; i < corredors.length; i++) {
-            if(corredors[i] != null && corredors[i].id == id){
-                corredors[i].nom = nouNom;
+        try {
+            FileWriter fileWriter = new FileWriter("corredoresTMP.txt", true);
+            BufferedReader fileReader = new BufferedReader(new FileReader("corredores.txt"));
+            String lineaCorredor;
+            while((lineaCorredor = fileReader.readLine()) != null){
+                String[] partes = lineaCorredor.split(":");
+
+                if(id == Integer.parseInt(partes[2])){
+                    fileWriter.write(nouNom + ":");
+                    fileWriter.write(partes[1] + ":");
+                    fileWriter.write(partes[2] + "\n");
+                    fileWriter.flush();
+                }else{
+                    fileWriter.write(lineaCorredor + "\n");
+                }
             }
+            fileWriter.close();
+            fileReader.close();
+
+            Files.move(FileSystems.getDefault().getPath("corredoresTMP.txt"),                 //Aquí estamos moviendo el fichero temporal
+                    FileSystems.getDefault().getPath("corredores.txt"), REPLACE_EXISTING);//para sobreescribir los datos del fichero antiguo.
+        }catch (IOException e){
+            e.printStackTrace();
         }
+
+//        for (int i = 0; i < corredors.length; i++) {
+//            if(corredors[i] != null && corredors[i].id == id){
+//                corredors[i].nom = nouNom;
+//            }
+//        }
     }
 
     public static void modificarEquipCorredor(int id, Equip nouEquip){
