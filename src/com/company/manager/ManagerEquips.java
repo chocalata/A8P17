@@ -14,12 +14,16 @@ public class ManagerEquips {
     static Equip[] equips = new Equip[100];
 
     public static Equip inscriureEquip(String nom) {
-        byte data[] = nom.getBytes();
-        ByteBuffer out = ByteBuffer.wrap(data);
+        byte nomBytes[] = (nom + ":").getBytes();
+        ByteBuffer outNom = ByteBuffer.wrap(nomBytes);
+
+        byte idBytes[] = (String.valueOf(obtenirNumeroEquips()+1) + "\n").getBytes();
+        ByteBuffer outId = ByteBuffer.wrap(idBytes);
 
         try (FileChannel fc = (FileChannel.open(FileSystems.getDefault().getPath("equips.txt"), READ, WRITE))) {
             fc.position(fc.size());
-            fc.write(out);
+            fc.write(outNom);
+            fc.write(outId);
 
         } catch (IOException x) {
             System.out.println("I/O Exception: " + x);

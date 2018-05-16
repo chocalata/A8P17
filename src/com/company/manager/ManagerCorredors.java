@@ -120,11 +120,6 @@ public class ManagerCorredors {
             e.printStackTrace();
         }
 
-//        for (int i = 0; i < corredors.length; i++) {
-//            if(corredors[i] != null && corredors[i].id == id){
-//                corredors[i].nom = nouNom;
-//            }
-//        }
     }
 
     public static void modificarEquipCorredor(int id, Equip nouEquip){
@@ -161,9 +156,8 @@ public class ManagerCorredors {
     private static int obtenirNumeroCorredors(){
         try {
             BufferedReader fileReader = new BufferedReader(new FileReader("corredores.txt"));
-            String lineaCorredor;
             int corredores = 0;
-            while ((lineaCorredor = fileReader.readLine()) != null) {
+            while (fileReader.readLine() != null) {
                 corredores += 1;
             }
             return corredores;
