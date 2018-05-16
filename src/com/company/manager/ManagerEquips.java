@@ -2,20 +2,28 @@ package com.company.manager;
 
 import com.company.model.Equip;
 
+import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.file.FileSystems;
+
+import static java.nio.file.StandardOpenOption.READ;
+import static java.nio.file.StandardOpenOption.WRITE;
+
 public class ManagerEquips {
     static Equip[] equips = new Equip[100];
 
-    public static Equip inscriureEquip(String nom){
-        for (int i = 0; i < equips.length; i++) {
-            if(equips[i] == null){
-                Equip equip = new Equip(nom);
-                equip.id = obtenirUltimIdEquip() + 1;
-                equips[i] = equip;
+    public static Equip inscriureEquip(String nom) {
+        byte data[] = nom.getBytes();
+        ByteBuffer out = ByteBuffer.wrap(data);
 
-                return equip;
-            }
+        try (FileChannel fc = (FileChannel.open(FileSystems.getDefault().getPath("equips.txt"), READ, WRITE))) {
+            fc.position(fc.size());
+            fc.write(out);
+
+        } catch (IOException x) {
+            System.out.println("I/O Exception: " + x);
         }
-
         return null;
     }
 
@@ -115,14 +123,18 @@ public class ManagerEquips {
     }
 
     private static int obtenirNumeroEquips(){
-        int count = 0;
-        for (int i = 0; i < equips.length; i++) {
-            if(equips[i] != null){
-                count++;
+        try {
+            BufferedReader fileReader = new BufferedReader(new FileReader("equips.txt"));
+            String lineaEquipo;
+            int equipos = 0;
+            while ((lineaEquipo = fileReader.readLine()) != null) {
+                equipos += 1;
             }
+            return equipos;
+        }catch (IOException e){
+            e.printStackTrace();
         }
-
-        return count;
+        return 0;
     }
 
     private static int obtenirNumeroEquipsPerNom(String nom){
