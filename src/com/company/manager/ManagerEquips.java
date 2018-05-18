@@ -5,6 +5,7 @@ import com.company.model.Equip;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
 import java.nio.file.FileSystems;
 
 import static java.nio.file.StandardOpenOption.READ;
@@ -12,7 +13,8 @@ import static java.nio.file.StandardOpenOption.WRITE;
 
 public class ManagerEquips {
     static Equip[] equips = new Equip[100];
-
+    static int MAXNOM = 12;
+    static int MAXID = 4;
     public static Equip inscriureEquip(String nom) {
         byte nomBytes[] = (nom + ":").getBytes();
         ByteBuffer outNom = ByteBuffer.wrap(nomBytes);
@@ -20,8 +22,7 @@ public class ManagerEquips {
         byte idBytes[] = (String.valueOf(obtenirNumeroEquips()+1) + "\n").getBytes();
         ByteBuffer outId = ByteBuffer.wrap(idBytes);
 
-        int MAXNOM = 12;
-        int MAXID = 4;
+
 
         try (FileChannel fc = (FileChannel.open(FileSystems.getDefault().getPath("equips.txt"), READ, WRITE))) {
             long posicionFinal = fc.size();
@@ -34,6 +35,7 @@ public class ManagerEquips {
 
             fc.position(posicionFinal);
             fc.write(byteBuffer);
+            fc.close();
 
         } catch (IOException x) {
             System.out.println("I/O Exception: " + x);
@@ -42,21 +44,23 @@ public class ManagerEquips {
     }
 
     public static Equip obtenirEquip(int id){
-        for (int i = 0; i < equips.length; i++) {
-            if(equips[i] != null && equips[i].id == id){
-                return equips[i];
-            }
+        try (FileChannel fc = (FileChannel.open(FileSystems.getDefault().getPath("equips.txt"), READ, WRITE))) {
+            fc.position((id-1)*(MAXNOM+MAXID));
+            ByteBuffer byteBuffer = ByteBuffer.allocate(MAXNOM);
+
+            fc.read(byteBuffer);
+
+            String nom = new String(byteBuffer.array(), Charset.forName("UTF-8"));
+
+//////////////////////////////////////////
+        } catch (IOException x) {
+            System.out.println("I/O Exception: " + x);
         }
 
         return null;
     }
 
     public static Equip obtenirEquip(String nom){
-        for (int i = 0; i < equips.length; i++) {
-            if(equips[i] != null && equips[i].nom.equals(nom)){
-                return equips[i];
-            }
-        }
 
         return null;
     }
