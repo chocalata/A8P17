@@ -20,10 +20,20 @@ public class ManagerEquips {
         byte idBytes[] = (String.valueOf(obtenirNumeroEquips()+1) + "\n").getBytes();
         ByteBuffer outId = ByteBuffer.wrap(idBytes);
 
+        int MAXNOM = 12;
+        int MAXID = 4;
+
         try (FileChannel fc = (FileChannel.open(FileSystems.getDefault().getPath("equips.txt"), READ, WRITE))) {
-            fc.position(fc.size());
+            long posicionFinal = fc.size();
+            fc.position(posicionFinal);
+
             fc.write(outNom);
-            fc.write(outId);
+            int id = (int) posicionFinal/(MAXNOM+MAXID)+1;
+            ByteBuffer byteBuffer = ByteBuffer.allocate(MAXID); //
+            byteBuffer.putInt(0,id);
+
+            fc.position(posicionFinal);
+            fc.write(byteBuffer);
 
         } catch (IOException x) {
             System.out.println("I/O Exception: " + x);

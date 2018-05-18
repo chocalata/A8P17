@@ -7,6 +7,6 @@ import java.io.IOException;
 
 public class MainTest {
     public static void main(String[] args) throws IOException {
-        Equip equip = ManagerEquips.inscriureEquip("equipo1");
+        Equip equip = ManagerEquips.inscriureEquip("equipo145");
     }
 }
