@@ -46,13 +46,20 @@ public class ManagerEquips {
     public static Equip obtenirEquip(int id){
         try (FileChannel fc = (FileChannel.open(FileSystems.getDefault().getPath("equips.txt"), READ, WRITE))) {
             fc.position((id-1)*(MAXNOM+MAXID));
-            ByteBuffer byteBuffer = ByteBuffer.allocate(MAXNOM);
+            ByteBuffer byteBufferNOM = ByteBuffer.allocate(MAXNOM);
 
-            fc.read(byteBuffer);
+            fc.read(byteBufferNOM);
+            String nom = new String(byteBufferNOM.array(), Charset.forName("UTF-8"));
+            if (nom.charAt(0) == '\0'){
+                return null;
+            }
 
-            String nom = new String(byteBuffer.array(), Charset.forName("UTF-8"));
+            Equip equip = new Equip(nom);
 
-//////////////////////////////////////////
+            equip.id = id;
+
+            return equip;
+///////////////////////////////falta el ID y luego crear el objeto con el nombre e id y luego devolverlo.
         } catch (IOException x) {
             System.out.println("I/O Exception: " + x);
         }

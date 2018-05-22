@@ -18,7 +18,7 @@ public class ManagerCorredors {
             return null;
         }
         try {
-            FileWriter fileWriter = new FileWriter("corredores.txt", true); //
+            FileWriter fileWriter = new FileWriter("corredores.txt", true); //No sobreescribe con el appends true
             fileWriter.write(nom + ":");
             fileWriter.write(String.valueOf(equip.id) + ":");
             fileWriter.write(String.valueOf(obtenirNumeroCorredors()+1) + "\n");
