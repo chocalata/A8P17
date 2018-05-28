@@ -8,6 +8,7 @@ import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.file.FileSystems;
 
+import static java.nio.file.StandardOpenOption.CREATE;
 import static java.nio.file.StandardOpenOption.READ;
 import static java.nio.file.StandardOpenOption.WRITE;
 
@@ -16,7 +17,7 @@ public class ManagerEquips {
     static int MAXNOM = 12;
     static int MAXID = 4;
     public static Equip inscriureEquip(String nom) {
-        try (FileChannel fc = (FileChannel.open(FileSystems.getDefault().getPath("equips.txt"), READ, WRITE))) {
+        try (FileChannel fc = (FileChannel.open(FileSystems.getDefault().getPath("equips.txt"), READ, WRITE, CREATE))) {
             long posicionFinal = fc.size();
 
             for (long i = 0; i < fc.size(); i += MAXID+MAXNOM) {
@@ -62,7 +63,7 @@ public class ManagerEquips {
     }
 
     public static Equip obtenirEquip(int id){
-        try (FileChannel fc = (FileChannel.open(FileSystems.getDefault().getPath("equips.txt"), READ, WRITE))) {
+        try (FileChannel fc = (FileChannel.open(FileSystems.getDefault().getPath("equips.txt"), READ, WRITE, CREATE))) {
             fc.position((id-1)*(MAXNOM+MAXID));
             ByteBuffer byteBufferNOM = ByteBuffer.allocate(MAXNOM);
 
@@ -85,7 +86,7 @@ public class ManagerEquips {
     }
 
     public static Equip obtenirEquip(String nom){
-        try (FileChannel fc = (FileChannel.open(FileSystems.getDefault().getPath("equips.txt"), READ, WRITE))) {
+        try (FileChannel fc = (FileChannel.open(FileSystems.getDefault().getPath("equips.txt"), READ, WRITE, CREATE))) {
             int longitud = nom.length();
             for (int i = 0; i < fc.size(); i += MAXNOM+MAXID) {
                 fc.position(i);
@@ -117,7 +118,7 @@ public class ManagerEquips {
     }
 
     public static String obtenirNomEquip(int id){
-        try (FileChannel fc = (FileChannel.open(FileSystems.getDefault().getPath("equips.txt"), READ, WRITE))) {
+        try (FileChannel fc = (FileChannel.open(FileSystems.getDefault().getPath("equips.txt"), READ, WRITE, CREATE))) {
             fc.position((id-1)*(MAXNOM+MAXID));
             ByteBuffer byteBufferNOM = ByteBuffer.allocate(MAXNOM);
             fc.read(byteBufferNOM);
@@ -136,7 +137,7 @@ public class ManagerEquips {
     }
 
     public static Equip[] obtenirLlistaEquips(){
-        try (FileChannel fc = (FileChannel.open(FileSystems.getDefault().getPath("equips.txt"), READ, WRITE))) {
+        try (FileChannel fc = (FileChannel.open(FileSystems.getDefault().getPath("equips.txt"), READ, WRITE, CREATE))) {
             Equip[] equipos = new Equip[obtenirNumeroEquips()];
             int contador = 0;
             for (int i = 0; i < fc.size(); i += MAXNOM+MAXID) {
@@ -168,7 +169,7 @@ public class ManagerEquips {
     }
 
     public static Equip[] buscarEquipsPerNom(String nom){
-        try (FileChannel fc = (FileChannel.open(FileSystems.getDefault().getPath("equips.txt"), READ, WRITE))) {
+        try (FileChannel fc = (FileChannel.open(FileSystems.getDefault().getPath("equips.txt"), READ, WRITE, CREATE))) {
             int longitud = nom.length();
             Equip[] llistaEquips = new Equip[obtenirNumeroEquipsPerNom(nom)];
             int contArray = 0;
@@ -204,7 +205,7 @@ public class ManagerEquips {
     }
 
     public static boolean existeixEquip(String nom){
-        try (FileChannel fc = (FileChannel.open(FileSystems.getDefault().getPath("equips.txt"), READ, WRITE))) {
+        try (FileChannel fc = (FileChannel.open(FileSystems.getDefault().getPath("equips.txt"), READ, WRITE, CREATE))) {
             int longitud = nom.length();
             for (int i = 0; i < fc.size(); i += MAXNOM+MAXID) {
                 fc.position(i);
@@ -226,9 +227,9 @@ public class ManagerEquips {
     }
 
     public static void modificarNomEquip(int id, String nouNom){
-        try (FileChannel fc = (FileChannel.open(FileSystems.getDefault().getPath("equips.txt"), READ, WRITE))) {
+        try (FileChannel fc = (FileChannel.open(FileSystems.getDefault().getPath("equips.txt"), READ, WRITE, CREATE))) {
             fc.position((id-1)*(MAXID+MAXNOM));
-            String nom = "";
+            String nom ;
             if (nouNom.getBytes().length > MAXNOM) {
                 nom = nouNom.substring(0,MAXNOM);
             }else{
@@ -245,7 +246,7 @@ public class ManagerEquips {
     }
 
     public static void esborrarEquip(int id){
-        try (FileChannel fc = (FileChannel.open(FileSystems.getDefault().getPath("equips.txt"), READ, WRITE))) {
+        try (FileChannel fc = (FileChannel.open(FileSystems.getDefault().getPath("equips.txt"), READ, WRITE, CREATE))) {
             fc.position((id-1)*(MAXNOM+MAXID));
             String borrado = "";
             for (int i = 0; i < MAXNOM+MAXID; i++) {
@@ -259,7 +260,7 @@ public class ManagerEquips {
     }
 
     private static int obtenirUltimIdEquip(){
-        try  (FileChannel fc = (FileChannel.open(FileSystems.getDefault().getPath("equips.txt"), READ, WRITE))){
+        try (FileChannel fc = (FileChannel.open(FileSystems.getDefault().getPath("equips.txt"), READ, WRITE, CREATE))) {
 
             int posicionFinal =(int)fc.size()-MAXID ;
             fc.position(posicionFinal);
@@ -277,7 +278,7 @@ public class ManagerEquips {
     }
 
     private static int obtenirNumeroEquips(){
-        try (FileChannel fc = (FileChannel.open(FileSystems.getDefault().getPath("equips.txt"), READ, WRITE))) {
+        try (FileChannel fc = (FileChannel.open(FileSystems.getDefault().getPath("equips.txt"), READ, WRITE, CREATE))) {
             long posicionFinal = fc.size();
             if (posicionFinal == 0){
                 return 0;
@@ -293,7 +294,7 @@ public class ManagerEquips {
     }
 
     private static int obtenirNumeroEquipsPerNom(String nom){
-        try (FileChannel fc = (FileChannel.open(FileSystems.getDefault().getPath("equips.txt"), READ, WRITE))) {
+        try (FileChannel fc = (FileChannel.open(FileSystems.getDefault().getPath("equips.txt"), READ, WRITE, CREATE))) {
             int longitud = nom.length();
             int numEquips = 0;
             for (int i = 0; i < fc.size(); i+= MAXNOM+MAXID) {

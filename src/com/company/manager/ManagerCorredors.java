@@ -234,7 +234,7 @@ public class ManagerCorredors {
         }
     }
 
-    /*//////////*/public static int obtenirUltimIdCorredor(){
+    private static int obtenirUltimIdCorredor(){
         try {
             int maxId = 0;
             BufferedReader fileReader = new BufferedReader(new FileReader("corredores.txt"));
