@@ -98,7 +98,7 @@ public class ManagerCorredors {
                     Corredor corredor = new Corredor(partes[0], Integer.parseInt(partes[1]));
                     corredor.id = Integer.parseInt(partes[2]);
                     llistaCorredors[contador] = corredor;
-                    contador+=1;
+                    contador++;
                 }
             }
             fileReader.close();
@@ -173,8 +173,7 @@ public class ManagerCorredors {
             fileWriter.close();
             fileReader.close();
 
-            Files.move(FileSystems.getDefault().getPath("corredoresTMPNom.txt"),                 //Aquí estamos moviendo el fichero temporal
-                    FileSystems.getDefault().getPath("corredores.txt"), REPLACE_EXISTING);//para sobreescribir los datos del fichero antiguo.
+            Files.move(FileSystems.getDefault().getPath("corredoresTMPNom.txt"), FileSystems.getDefault().getPath("corredores.txt"), REPLACE_EXISTING);//para sobreescribir los datos del fichero antiguo.
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -230,8 +229,7 @@ public class ManagerCorredors {
             fileWriter.close();
             fileReader.close();
 
-            Files.move(FileSystems.getDefault().getPath("corredoresTMPEsborrar.txt"),                 //Aquí estamos moviendo el fichero temporal
-                    FileSystems.getDefault().getPath("corredores.txt"), REPLACE_EXISTING);//para sobreescribir los datos del fichero antiguo.
+            Files.move(FileSystems.getDefault().getPath("corredoresTMPEsborrar.txt"), FileSystems.getDefault().getPath("corredores.txt"), REPLACE_EXISTING);//para sobreescribir los datos del fichero antiguo.
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -287,7 +285,7 @@ public class ManagerCorredors {
             String lineaCorredor;
             while ((lineaCorredor = fileReader.readLine()) != null) {
                 String[] partes = lineaCorredor.split(":");
-                if (partes[0].equals(nom)) {
+                if (partes[0].toLowerCase().equals(nom.toLowerCase())) {
                     count++;
                 }
             }
