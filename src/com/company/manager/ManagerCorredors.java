@@ -21,6 +21,7 @@ public class ManagerCorredors {
         try {
             FileWriter fileWriter = new FileWriter("corredoresTMP.txt", true); //No sobreescribe con el appends true
             FileWriter asd = new FileWriter("corredores.txt",true);
+            asd.close();
             BufferedReader fileReader = new BufferedReader(new FileReader("corredores.txt"));
             String lineaCorredor;
 
@@ -49,7 +50,6 @@ public class ManagerCorredors {
             }
             fileWriter.close();
             fileReader.close();
-            asd.close();
 
             Files.move(FileSystems.getDefault().getPath("corredoresTMP.txt"),                 //Aquí estamos moviendo el fichero temporal
                     FileSystems.getDefault().getPath("corredores.txt"), REPLACE_EXISTING);//para sobreescribir los datos del fichero antiguo.
@@ -75,7 +75,7 @@ public class ManagerCorredors {
                 if(id == Integer.parseInt(partes[2])){
                     Corredor corredor = new Corredor(partes[0], Integer.parseInt(partes[1]));
                     corredor.id = id;
-
+                    fileReader.close();
                     return corredor;
                 }
             }
@@ -143,6 +143,7 @@ public class ManagerCorredors {
                 String[] partes = lineaCorredor.split(":");
                 if(!lineaCorredor.equals("")) {
                     if (nom.toLowerCase().equals(partes[0].toLowerCase())) {
+                        fileReader.close();
                         return true;
                     }
                 }

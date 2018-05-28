@@ -87,7 +87,12 @@ public class ManagerEquips {
 
     public static Equip obtenirEquip(String nom){
         try (FileChannel fc = (FileChannel.open(FileSystems.getDefault().getPath("equips.txt"), READ, WRITE, CREATE))) {
-            int longitud = nom.length();
+            int longitud;
+            if(nom.length() > MAXNOM) {
+                longitud = MAXNOM;
+            }else{
+                longitud = nom.length();
+            }
             for (int i = 0; i < fc.size(); i += MAXNOM+MAXID) {
                 fc.position(i);
                 ByteBuffer byteBufferNOM = ByteBuffer.allocate(MAXNOM);
@@ -171,7 +176,12 @@ public class ManagerEquips {
 
     public static Equip[] buscarEquipsPerNom(String nom){
         try (FileChannel fc = (FileChannel.open(FileSystems.getDefault().getPath("equips.txt"), READ, WRITE, CREATE))) {
-            int longitud = nom.length();
+            int longitud;
+            if(nom.length() > MAXNOM) {
+                longitud = MAXNOM;
+            }else{
+                longitud = nom.length();
+            }
             Equip[] llistaEquips = new Equip[obtenirNumeroEquipsPerNom(nom)];
             int contArray = 0;
             for (int i = 0; i < fc.size(); i += MAXNOM+MAXID) {
@@ -207,7 +217,12 @@ public class ManagerEquips {
 
     public static boolean existeixEquip(String nom){
         try (FileChannel fc = (FileChannel.open(FileSystems.getDefault().getPath("equips.txt"), READ, WRITE, CREATE))) {
-            int longitud = nom.length();
+            int longitud;
+            if(nom.length() > MAXNOM) {
+                longitud = MAXNOM;
+            }else{
+                longitud = nom.length();
+            }
             for (int i = 0; i < fc.size(); i += MAXNOM+MAXID) {
                 fc.position(i);
                 ByteBuffer byteBufferNOM = ByteBuffer.allocate(MAXNOM);
@@ -305,7 +320,12 @@ public class ManagerEquips {
 
     public static int obtenirNumeroEquipsPerNom(String nom){
         try (FileChannel fc = (FileChannel.open(FileSystems.getDefault().getPath("equips.txt"), READ, WRITE, CREATE))) {
-            int longitud = nom.length();
+            int longitud;
+            if(nom.length() > MAXNOM) {
+                longitud = MAXNOM;
+            }else{
+                longitud = nom.length();
+            }
             int numEquips = 0;
             for (int i = 0; i < fc.size(); i+= MAXNOM+MAXID) {
                 fc.position(i);
