@@ -87,18 +87,19 @@ public class ManagerCorredors {
     }
 
     public static Corredor[] obtenirLlistaCorredors(){
-
         try {
             int contador= 0;
             Corredor[] llistaCorredors = new Corredor[obtenirNumeroCorredors()];
             BufferedReader fileReader = new BufferedReader(new FileReader("corredores.txt"));
             String lineaCorredor;
             while ((lineaCorredor = fileReader.readLine()) != null){
-                String[] partes = lineaCorredor.split(":");
-                Corredor corredor = new Corredor(partes[0],Integer.parseInt(partes[1]));
-                corredor.id = Integer.parseInt(partes[2]);
-                llistaCorredors[contador]= corredor;
-                contador+=1;
+                if(!lineaCorredor.equals("")) {
+                    String[] partes = lineaCorredor.split(":");
+                    Corredor corredor = new Corredor(partes[0], Integer.parseInt(partes[1]));
+                    corredor.id = Integer.parseInt(partes[2]);
+                    llistaCorredors[contador] = corredor;
+                    contador+=1;
+                }
             }
             fileReader.close();
             return llistaCorredors;
@@ -116,12 +117,14 @@ public class ManagerCorredors {
             String lineaCorredor;
             while ((lineaCorredor = fileReader.readLine()) != null) {
                 String[] partes = lineaCorredor.split(":");
-                if (partes[0].toLowerCase().equals(nom.toLowerCase())){
-                    Corredor corredor = new Corredor(partes[0], Integer.parseInt(partes[1]));
-                    corredor.id = Integer.parseInt(partes[2]);
+                if(!lineaCorredor.equals("")) {
+                    if (partes[0].toLowerCase().equals(nom.toLowerCase())) {
+                        Corredor corredor = new Corredor(partes[0], Integer.parseInt(partes[1]));
+                        corredor.id = Integer.parseInt(partes[2]);
 
-                    llistaCorredors[count] = corredor;
-                    count++;
+                        llistaCorredors[count] = corredor;
+                        count++;
+                    }
                 }
             }
             fileReader.close();
@@ -138,9 +141,10 @@ public class ManagerCorredors {
             String lineaCorredor;
             while ((lineaCorredor = fileReader.readLine()) != null) {
                 String[] partes = lineaCorredor.split(":");
-
-                if(nom.toLowerCase().equals(partes[0].toLowerCase())){
-                    return true;
+                if(!lineaCorredor.equals("")) {
+                    if (nom.toLowerCase().equals(partes[0].toLowerCase())) {
+                        return true;
+                    }
                 }
             }
             fileReader.close();
@@ -157,13 +161,12 @@ public class ManagerCorredors {
             String lineaCorredor;
             while((lineaCorredor = fileReader.readLine()) != null){
                 String[] partes = lineaCorredor.split(":");
-
-                if(id == Integer.parseInt(partes[2])){
+                if (!lineaCorredor.equals("") && id == Integer.parseInt(partes[2])) {
                     fileWriter.write(nouNom + ":");
                     fileWriter.write(partes[1] + ":");
                     fileWriter.write(partes[2] + "\n");
                     fileWriter.flush();
-                }else{
+                } else {
                     fileWriter.write(lineaCorredor + "\n");
                 }
             }
@@ -190,7 +193,7 @@ public class ManagerCorredors {
             while((lineaCorredor = fileReader.readLine()) != null){
                 String[] partes = lineaCorredor.split(":");
 
-                if(id == Integer.parseInt(partes[2])){
+                if(!lineaCorredor.equals("") && id == Integer.parseInt(partes[2])){
                     fileWriter.write(partes[0] + ":");
                     fileWriter.write(nouEquip.id + ":");
                     fileWriter.write(partes[2] + "\n");
@@ -217,7 +220,7 @@ public class ManagerCorredors {
             while((lineaCorredor = fileReader.readLine()) != null){
                 String[] partes = lineaCorredor.split(":");
 
-                if(id == Integer.parseInt(partes[2])){
+                if(!lineaCorredor.equals("") && id == Integer.parseInt(partes[2])){
                     fileWriter.write("\n");
                     fileWriter.flush();
                 }else{

@@ -95,7 +95,7 @@ public class ManagerEquips {
                 String nomEquip = new String(byteBufferNOM.array(), Charset.forName("UTF-8"));
                 String subsNomEquip = nomEquip.substring(0,longitud);
 
-                if (subsNomEquip.toLowerCase().equals(nom.toLowerCase())){
+                if (subsNomEquip.toLowerCase().equals(nom.toLowerCase()) && nomEquip.charAt(longitud) == '\0'){
                     fc.position(i+MAXNOM);
 
                     ByteBuffer byteBufferID = ByteBuffer.allocate(MAXID);
@@ -146,17 +146,18 @@ public class ManagerEquips {
                 ByteBuffer byteBufferNOM = ByteBuffer.allocate(MAXNOM);
                 fc.read(byteBufferNOM);
                 String nomEquip = new String(byteBufferNOM.array(), Charset.forName("UTF-8"));
+                if(nomEquip.charAt(0) != '\0') {
+                    fc.position(i + MAXNOM);
 
-                fc.position(i+MAXNOM);
+                    ByteBuffer byteBufferID = ByteBuffer.allocate(MAXID);
+                    fc.read(byteBufferID);
+                    int id = byteBufferID.getInt(0);
 
-                ByteBuffer byteBufferID = ByteBuffer.allocate(MAXID);
-                fc.read(byteBufferID);
-                int id = byteBufferID.getInt(0);
-
-                Equip equip = new Equip(nomEquip);
-                equip.id = id;
-                equipos[contador] = equip;
-                contador += 1;
+                    Equip equip = new Equip(nomEquip);
+                    equip.id = id;
+                    equipos[contador] = equip;
+                    contador += 1;
+                }
             }
             fc.close();
             return equipos;
@@ -267,7 +268,6 @@ public class ManagerEquips {
             ByteBuffer byteBuffer2 = ByteBuffer.allocate(MAXID);
             fc.read(byteBuffer2);
             int idFinal=byteBuffer2.getInt(0);
-            System.out.println(idFinal);
             fc.close();
             return idFinal;
 
@@ -283,7 +283,17 @@ public class ManagerEquips {
             if (posicionFinal == 0){
                 return 0;
             }
+
             int numeroEquips = (int) posicionFinal / (MAXID + MAXNOM);
+            for (int i = 0; i < fc.size(); i+=MAXID + MAXNOM) {
+                fc.position(i);
+                ByteBuffer byteBufferNOM = ByteBuffer.allocate(MAXNOM);
+                fc.read(byteBufferNOM);
+                String nom = new String(byteBufferNOM.array(), Charset.forName("UTF-8"));
+                if(nom.charAt(1) == '\0'){
+                    numeroEquips--;
+                }
+            }
             fc.close();
             return numeroEquips;
 
@@ -293,7 +303,7 @@ public class ManagerEquips {
         return 0;
     }
 
-    private static int obtenirNumeroEquipsPerNom(String nom){
+    public static int obtenirNumeroEquipsPerNom(String nom){
         try (FileChannel fc = (FileChannel.open(FileSystems.getDefault().getPath("equips.txt"), READ, WRITE, CREATE))) {
             int longitud = nom.length();
             int numEquips = 0;
